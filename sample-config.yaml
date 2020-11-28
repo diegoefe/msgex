@@ -1,0 +1,7 @@
+topics:
+  - inbound: myinboundtopic
+  - outbound: myoutboundtopic
+
+messages:
+  - failure_limit: 3
+
