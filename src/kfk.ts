@@ -1,6 +1,6 @@
-import { KafkaClient, Consumer, Message, HighLevelProducer } from 'kafka-node';
+import { KafkaClient, Consumer as KConsumer, Message, HighLevelProducer } from 'kafka-node';
 // import { Config } from './config';
-import { Msg } from './msgproc';
+import { Msg, ErrMsg } from './msgproc';
 
 class Cli {
     protected cli?:KafkaClient;
@@ -43,6 +43,54 @@ export class Producer extends Cli {
                 prod.on('error', (error) => {
                     console.error(error);
                     reject(error);
+                });
+            });
+        }
+    }
+}
+
+export interface MsgInTopic {
+    topic:string;
+    msg:Msg;
+}
+
+export class Consumer extends Cli {
+    private cons_?:KConsumer;
+    async connect(_host:string, _topics:any) {
+        this.cli = await super.makeClient(_host);
+        var options = {
+            autoCommit: true,
+            // autoCommit: false,
+            fetchMaxWaitMs: 1000,
+            fetchMaxBytes: 1024 * 1024
+          };
+        this.cons_ = new KConsumer(this.cli, _topics, options);
+    }
+
+    async receive() : Promise<MsgInTopic> {
+        if(this.cons_) {
+            const cons:KConsumer = this.cons_;
+            return new Promise((resolve,reject)=> {
+                cons.on('message', function(message:Message) {
+                    // console.log('received message in topic "'+message.topic+'"')
+                    const msg:Msg = JSON.parse(message.value.toString());
+                    // console.log(msg);
+                    resolve({msg:msg, topic:message.topic})
+                  });
+                  
+                  cons.on('error', function(err) {
+                    reject(new Error(err));
+                  });
+            })
+        }
+        return { topic:'none', msg:new ErrMsg('bad Consumer') }
+    }
+    async close() {
+        if(this.cons_) {
+            const cons:KConsumer = this.cons_;
+            return new Promise((resolve,reject)=> {
+                cons.close(true, function() {
+                    resolve(true);
                 });
             });
         }

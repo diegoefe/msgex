@@ -28,6 +28,12 @@ export class PongMsg extends Msg {
     }
 }
 
+export class ErrMsg extends Msg {
+    constructor(_desc:string) {
+        super("error", {"description":_desc});
+    }
+}
+
 // Message Processor
 export class MsgProc {
     readonly process_time:number;
@@ -36,5 +42,5 @@ export class MsgProc {
         this.process_time = _config.server.messages.processing_time;
         this.failure_limit = _config.server.messages.failure_limit;
     }
-    
+
 };
