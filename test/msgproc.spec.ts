@@ -8,8 +8,8 @@ describe('Message processor',
     it('Msg creation', () => { 
       let ping = new PingMsg(false);
       expect(ping.payload).to.eql({ message:"ping", force_error:false });
-      const now = new Date();
-      let pong = new PongMsg(now);
-      expect(pong.payload).to.eql({ message:"pong", processing_time:now });
+      const time:number=10000;
+      let pong = new PongMsg(time);
+      expect(pong.payload).to.eql({ message:"pong", processing_time:time });
   }); 
 });

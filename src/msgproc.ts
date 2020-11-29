@@ -20,7 +20,7 @@ export class PingMsg extends Msg {
 }
 
 export class PongMsg extends Msg {
-    constructor(_time:Date) {
+    constructor(_time:number) {
         super("pong", "processing_time", _time);
     }
 }
