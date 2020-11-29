@@ -10,4 +10,5 @@ kafka:
     inbound: myinboundtopic
     outbound:
       success: myoutboundsuccesstopic 
-      error: myoutbounderrortopic 
+      error: myoutbounderrortopic
+    deadletter: mydeadlettertopic

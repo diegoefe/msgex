@@ -30,7 +30,8 @@ export class Config {
                     outbound: {
                         success: env.ME_TOPICS_OUTBOUND_SUCCESS,
                         error: env.ME_TOPICS_OUTBOUND_ERROR
-                    }
+                    },
+                    deadletter: env.ME_TOPICS_DEADLETTER
                 },
 
             };

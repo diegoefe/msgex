@@ -10,7 +10,8 @@ const tcfg = {
             outbound: {
                 error: "myoutbounderrortopic",
                 success: "myoutboundsuccesstopic"
-            }
+            },
+            deadletter:"mydeadlettertopic"
         }
     }
 };
