@@ -1,9 +1,4 @@
 server:
-  topics:
-    inbound: myinboundtopic
-    outbound:
-      success: myoutboundsuccesstopic 
-      error: myoutbounderrortopic 
   messages:
     processing_time: 30 # seconds
     failure_limit: 3
@@ -11,3 +6,8 @@ server:
 
 kafka:
   url: localhost:2181
+  topics:
+    inbound: myinboundtopic
+    outbound:
+      success: myoutboundsuccesstopic 
+      error: myoutbounderrortopic 

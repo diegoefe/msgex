@@ -17,6 +17,14 @@ export class Config {
         } else {
             const env = process.env;
             this.server = {
+                messages: {
+                    processing_time: this.getInt(env.ME_MESSAGE_PROC_TIME),
+                    failure_limit: this.getInt(env.ME_MESSAGE_FAILURE_LIMIT)
+                },
+                port: this.getInt(env.ME_SERVER_PORT)
+            };
+            this.kafka = {
+                url : env.ME_KAFKA_URL,
                 topics : {
                     inbound: env.ME_TOPICS_INBOUND,
                     outbound: {
@@ -24,13 +32,8 @@ export class Config {
                         error: env.ME_TOPICS_OUTBOUND_ERROR
                     }
                 },
-                messages: {
-                    processing_time: this.getInt(env.ME_MESSAGE_PROC_TIME),
-                    failure_limit: this.getInt(env.ME_MESSAGE_FAILURE_LIMIT)
-                },
-                port: this.getInt(env.ME_SERVER_PORT)
+
             };
-            this.kafka = { url : env.ME_KAFKA_URL };
         }
     }
     private getInt(val?:string) {
