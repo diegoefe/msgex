@@ -11,16 +11,20 @@
     "test_ne": "mocha -r ts-node/register test/**/*.spec.ts",
     "test": "bash ./run_tests.sh",
     "dev": "nodemon",
+    "kcons": "ts-node util/kafka_consumer.ts",
+    "kprod": "ts-node util/kafka_producer.ts",
     "start": "ts-node src/server.ts"
   },
   "author": "Diego Florio",
   "license": "ISC",
   "dependencies": {
     "@types/js-yaml": "^3.12.5",
+    "@types/kafka-node": "^3.0.0",
     "@types/node": "^14.14.10",
     "@types/uuid": "^8.3.0",
     "express": "^4.17.1",
     "js-yaml": "^3.14.0",
+    "kafka-node": "^5.0.0",
     "uuid": "^8.3.1"
   },
   "devDependencies": {

@@ -29,9 +29,9 @@ export class Config {
                     inbound: env.ME_TOPICS_INBOUND,
                     outbound: {
                         success: env.ME_TOPICS_OUTBOUND_SUCCESS,
-                        error: env.ME_TOPICS_OUTBOUND_ERROR
-                    },
-                    deadletter: env.ME_TOPICS_DEADLETTER
+                        error: env.ME_TOPICS_OUTBOUND_ERROR,
+                        dead: env.ME_TOPICS_OUTBOUND_DEAD
+                    }
                 },
 
             };
