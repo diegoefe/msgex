@@ -9,13 +9,14 @@
   "scripts": {
     "ts:node": "ts-node",
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/server.ts"
   },
   "author": "Diego Florio",
   "license": "ISC",
   "dependencies": {
     "js-yaml": "^3.14.0",
-    "ts-node": "^9.0.0"
+    "ts-node": "^9.0.0",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",
