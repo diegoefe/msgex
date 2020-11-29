@@ -1,20 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 import { Config } from '../src/config';
-
-const tcfg = {
-  server: {
-    topics: {
-      inbound: 'myinboundtopic',
-      outbound: {
-        error: "myoutbounderrortopic",
-        success: "myoutboundsuccesstopic"
-      }
-    },
-    messages: { processing_time: 30, failure_limit: 3 }
-  },
-  kafka: { url: 'localhost:2181' }
-}
+import tcfg from './testconfig';
 
 describe('Config', 
   () => { 

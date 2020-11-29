@@ -1,8 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { MsgProc } from '../src/msgproc';
-
+//import { MsgProc } from '../src/msgproc';
 
 describe('Message processor', 
   () => { 

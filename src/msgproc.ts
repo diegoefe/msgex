@@ -2,8 +2,10 @@ import { Config } from './config'
 
 // Message Processor
 export class MsgProc {
-    config_:Config;
+    process_time_:number;
+    failure_limit_:number;
     constructor(_config:Config) {
-        this.config_ = _config;
+        this.process_time_ = _config.server.messages.processing_time;
+        this.failure_limit_ = _config.server.messages.failure_limit;
     }
 }
