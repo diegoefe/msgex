@@ -4,9 +4,7 @@ import { PingMsg } from '../src/msgproc';
 import { KafkaClient as Client, HighLevelProducer } from 'kafka-node';
 
 const cfg:Config = new Config('./config.yaml');
-
 const client = new Client(cfg.kafka.url);
-
 client.on('error', function(error) {
     console.error(error);
 });
@@ -17,6 +15,7 @@ producer.on('ready', function() {
   const msg = new PingMsg(false);
   var payload = [{
     topic: cfg.kafka.topics.inbound,
+    // topic: cfg.kafka.topics.outbound.dead,
     messages: JSON.stringify(msg, null, 2),
     attributes: 1 /* Use GZip compression for the payload */
   }];

@@ -22,18 +22,21 @@ fi
 
 cd ${kafka_dir}
 
+zconf=config/zookeeper.properties
+kconf=config/server.properties
+
 case $1 in
    start)
-      bin/zookeeper-server-start.sh config/zookeeper.properties 1>/dev/null &
+      bin/zookeeper-server-start.sh $zconf 1>/dev/null &
       sleep 5
       echo "Press any key to start kafka server"
       read
-      bin/kafka-server-start.sh config/server.properties &
+      bin/kafka-server-start.sh $kconf &
       ;;
 
    stop)
-      bin/kafka-server-stop.sh config/server.properties 1>/dev/null
-      bin/zookeeper-server-stop.sh config/zookeeper.properties 1>/dev/null
+      bin/kafka-server-stop.sh $kconf 1>/dev/null
+      bin/zookeeper-server-stop.sh $zconf 1>/dev/null
       ;;
 
    *)
