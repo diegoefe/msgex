@@ -1,31 +1,37 @@
 import { Config } from './config'
 import { v4 as uuidv4 } from 'uuid';
-
-class Payload {
-    readonly text:string;
-    readonly force_error:boolean;
-    constructor(_text:string, _force_error:boolean) {
-        this.text = _text;
-        this.force_error = _force_error;
-    }
-};
+import { LooseObject } from './types';
 
 // Message
 export class Msg {
     readonly transaction_id:string;
-    readonly payload:Payload;
-    constructor(_text:string, _force_error:boolean) {
-        this.payload = new Payload(_text, _force_error)
+    readonly payload:LooseObject;
+    constructor(_text:string, _pname:string, _pval:any) {
+        this.payload = { "message":_text };
+        this.payload[_pname] = _pval;
         this.transaction_id = uuidv4();
     }
 };
 
+export class PingMsg extends Msg {
+    constructor(_force_error:boolean) {
+        super("ping", "force_error", _force_error);
+    }
+}
+
+export class PongMsg extends Msg {
+    constructor(_time:Date) {
+        super("pong", "processing_time", _time);
+    }
+}
+
 // Message Processor
 export class MsgProc {
-    process_time_:number;
-    failure_limit_:number;
+    readonly process_time:number;
+    readonly failure_limit:number;
     constructor(_config:Config) {
-        this.process_time_ = _config.server.messages.processing_time;
-        this.failure_limit_ = _config.server.messages.failure_limit;
+        this.process_time = _config.server.messages.processing_time;
+        this.failure_limit = _config.server.messages.failure_limit;
     }
+
 };
