@@ -36,5 +36,5 @@ export class MsgProc {
         this.process_time = _config.server.messages.processing_time;
         this.failure_limit = _config.server.messages.failure_limit;
     }
-
+    
 };

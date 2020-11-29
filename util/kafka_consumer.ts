@@ -19,9 +19,6 @@ client.on('error', function(error) {
     console.error(error);
 });
 
-HighLevelProducer
-
-
 var options = {
     // autoCommit: true,
     autoCommit: false,
