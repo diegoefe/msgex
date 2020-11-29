@@ -11,7 +11,7 @@ export class Config {
     constructor(_yaml_file_path?:string) {
         if(_yaml_file_path) {
             const data:string = fs.readFileSync(_yaml_file_path, { encoding:'utf8'} );
-            const cfg = yaml.safeLoad(data);
+            const cfg = yaml.load(data);
             this.server = cfg.server;
             this.kafka = cfg.kafka;
         } else {
@@ -25,12 +25,19 @@ export class Config {
                     }
                 },
                 messages: {
-                    processing_time: parseInt(env.ME_MESSAGE_PROC_TIME),
-                    failure_limit: parseInt(env.ME_MESSAGE_FAILURE_LIMIT)
-                }
+                    processing_time: this.getInt(env.ME_MESSAGE_PROC_TIME),
+                    failure_limit: this.getInt(env.ME_MESSAGE_FAILURE_LIMIT)
+                },
+                port: this.getInt(env.ME_SERVER_PORT)
             };
             this.kafka = { url : env.ME_KAFKA_URL };
         }
+    }
+    private getInt(val?:string) {
+        if(val) {
+            return parseInt(val);
+        }
+        return 0;
     }
 };
 

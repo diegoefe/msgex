@@ -15,17 +15,19 @@
   ```
 
 - Configure the server and Kafka access
-    - To run the server locally, copy [sample-config.yaml](sample-config.yaml) to **config.yaml** and customize it
+    - To use the server locally, copy [sample-config.yaml](sample-config.yaml) to **config.yaml** and customize it
 
       ```bash
       $ cp sample-config.yaml config.yaml
       $ vim config.yaml
       ```
-    - To remote deploy you may have a look at [sample-env.sh](config-env.sh)
+    - To use it on a remote deploy you may have a look at [sample-env.sh](config-env.sh)
 
 
-- Start the server
+- Start the server locally
 
   ```bash
-    $ npm start
+    $ npm run dev
   ```
+
+- Remote deploy (TODO)
