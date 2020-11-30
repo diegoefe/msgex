@@ -4,7 +4,7 @@ import 'mocha';
 import { PingMsg, PongMsg, MsgProc } from '../src/msgproc';
 
 describe('Message processor', 
-  () => { 
+() => { 
     it('Msg creation', () => { 
       const ping = new PingMsg(false);
       expect(ping.payload).to.eql({ message:"ping", force_error:false });
