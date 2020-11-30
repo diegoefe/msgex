@@ -8,13 +8,8 @@ import { resolve } from 'path';
 
 
 class MockProd implements iProducer {
-  topic:string;
-  msg:Msg;
-  
-  constructor() {
-    this.topic='';
-    this.msg = new ErrMsg('');
-  }
+  topic:string = '';
+  msg:Msg = new ErrMsg('');
 
   send(_topic:string, _msg:Msg) {
     this.topic = _topic;
@@ -31,8 +26,13 @@ describe('Message processing',
       const ping = new PingMsg(false);
       expect(ping.payload).to.eql({ message:"ping", force_error:false });
       const time:number=10000;
-      const pong = new PongMsg(time);
+      const pong = new PongMsg(time, ping.transaction_id);
       expect(pong.payload).to.eql({ message:"pong", processing_time:time });
+      expect(pong.transaction_id).to.eql(ping.transaction_id)
+      const custom_tid:string = "my-custom-transaction-id";
+      const ping2 = new PingMsg(true, custom_tid);
+      expect(ping2.payload).to.eql({ message:"ping", force_error:true });
+      expect(ping2.transaction_id).to.eql(custom_tid)
   });
   
   describe('MsgProc', 
@@ -43,8 +43,8 @@ describe('Message processing',
       cfg.server.messages.processing_delay = 10;
       cfg.server.messages.processing_delay = 4;
       let mp:MsgProc = new MsgProc(cfg, dummyProc);
-      expect(mp.delay).to.eql(cfg.server.messages.processing_delay);      
-      expect(mp.failure_limit).to.eql(cfg.server.messages.failure_limit);      
+      expect(mp.delay).to.eql(cfg.server.messages.processing_delay);
+      expect(mp.failure_limit).to.eql(cfg.server.messages.failure_limit);
     });
   });
 
