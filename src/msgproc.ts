@@ -75,7 +75,7 @@ export class MsgProc {
         if(! (_msg.transaction_id in this.msgs_)) {
             this.msgs_[_msg.transaction_id] = mt;
         }
-        try {
+        // try {
             const pong:PongMsg = new PongMsg(new Date().getDate(), mt.msg.transaction_id);
             if(mt.msg.payload.force_error) {
                 await this.prod_.send(this.topics_.error, pong);
@@ -89,9 +89,7 @@ export class MsgProc {
                 await this.prod_.send(this.topics_.dead, pong);
                 mt.status = Status.Deleted;
             }
-        } catch(e:any) {
-
-        }
+        // } catch(e:any) { }
     }
     async consume(_msg:PingMsg) {
         if(_msg.transaction_id in this.msgs_) {
