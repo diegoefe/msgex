@@ -12,7 +12,7 @@
 - Run tests
 
   ```bash
-    $ npm tests
+    $ npm test
   ```
 
 - Configure the server and Kafka access
@@ -35,9 +35,14 @@
 
 
 ### OS notes
-- Use this preferably on a Linux machine, on Windows you may try this command, before 'npm install', to make it work with
-  ```bash
-    npm install -g windows-build-tools.
-  ```
-  In case some pre-compiled binaries for your machine where not found and may need to be recompiled
+- Win32
+  - If **npm install** fails, you may try this command (before *npm install*), to make it work:
+    ```bash
+      npm install -g windows-build-tools.
+    ```
+    In case some pre-compiled binaries for your machine where not found and may need to be recompiled
+  - For testing, run:
+    ```bash
+      $ npm test_ne
+    ```
   
