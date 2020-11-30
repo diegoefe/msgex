@@ -1,6 +1,6 @@
 const tcfg = {
     server: {
-        messages: { processing_time: 30, failure_limit: 3 },
+        messages: { processing_delay: 30, failure_limit: 3 },
         port: 8088
     },
     kafka: {

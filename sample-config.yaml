@@ -1,6 +1,6 @@
 server:
   messages:
-    processing_time: 30 # seconds
+    processing_delay: 30 # seconds
     failure_limit: 3
   port: 8088
 

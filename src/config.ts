@@ -18,7 +18,7 @@ export class Config {
             const env = process.env;
             this.server = {
                 messages: {
-                    processing_time: this.getInt(env.ME_MESSAGE_PROC_TIME),
+                    processing_delay: this.getInt(env.ME_MESSAGE_PROC_DELAY),
                     failure_limit: this.getInt(env.ME_MESSAGE_FAILURE_LIMIT)
                 },
                 port: this.getInt(env.ME_SERVER_PORT)

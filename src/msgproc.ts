@@ -40,13 +40,12 @@ export interface iProducer {
 
 // Message Processor
 export class MsgProc {
-    readonly process_time:number;
+    readonly delay:number;
     readonly failure_limit:number;
     private prod_:iProducer;
     constructor(_config:Config, _prod:iProducer) {
-        this.process_time = _config.server.messages.processing_time;
+        this.delay = _config.server.messages.processing_delay;
         this.failure_limit = _config.server.messages.failure_limit;
         this.prod_ = _prod;
     }
-
 }
