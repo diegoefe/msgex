@@ -5,7 +5,7 @@ import { LooseObject } from './types';
 // Message
 export class Msg {
     readonly transaction_id:string;
-    payload:LooseObject;
+    readonly payload:LooseObject;
     constructor(_text:string, _data:LooseObject, _transaction_id:string) {
         this.payload = { "message":_text };
         Object.keys(_data).forEach((key:string) => {
@@ -76,7 +76,8 @@ export class MsgProc {
             this.msgs_[_msg.transaction_id] = mt;
         }
         // try {
-            const pong:PongMsg = new PongMsg(new Date().getDate(), mt.msg.transaction_id);
+            const now:Date = new Date();    
+            const pong:PongMsg = new PongMsg(now.getDate()-_msg.payload.created_at.getDate(), mt.msg.transaction_id);
             if(mt.msg.payload.force_error) {
                 await this.prod_.send(this.topics_.error, pong);
                 mt.status = Status.SendErr;
@@ -91,6 +92,9 @@ export class MsgProc {
             }
         // } catch(e:any) { }
     }
+    private process(_msg:PingMsg) {
+        setTimeout(() => { this.send(_msg); }, this.delay);
+    }
     async consume(_msg:PingMsg) {
         if(_msg.transaction_id in this.msgs_) {
             let mt:MsgState = this.msgs_[_msg.transaction_id];
@@ -104,12 +108,12 @@ export class MsgProc {
                     break;
                 case Status.SendErr:
                     // retry the failed message
-                    setTimeout(() => { this.send(_msg); }, this.delay);
+                    this.process(_msg);
                     break;                    
             }
         } else {
             // new nessage
-            setTimeout(() => { this.send(_msg); }, this.delay);
+            this.process(_msg);
         }
     }
 }
