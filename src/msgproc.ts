@@ -34,13 +34,19 @@ export class ErrMsg extends Msg {
     }
 }
 
+export interface iProducer {
+    send(_topic:string, _msg:Msg) : Promise<string>;
+}
+
 // Message Processor
 export class MsgProc {
     readonly process_time:number;
     readonly failure_limit:number;
-    constructor(_config:Config) {
+    private prod_:iProducer;
+    constructor(_config:Config, _prod:iProducer) {
         this.process_time = _config.server.messages.processing_time;
         this.failure_limit = _config.server.messages.failure_limit;
+        this.prod_ = _prod;
     }
 
-};
+}

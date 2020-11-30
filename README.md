@@ -35,14 +35,15 @@
 
 
 ### OS notes
+- Linux
+  - For testing, run (or npm test):
+    ```bash
+      $ npm test_all
+    ```
+
 - Win32
   - If **npm install** fails, you may try this command (before *npm install*), to make it work:
     ```bash
       npm install -g windows-build-tools.
     ```
-    In case some pre-compiled binaries for your machine where not found and may need to be recompiled
-  - For testing, run:
-    ```bash
-      $ npm test_ne
-    ```
-  
+    In case some pre-compiled binaries for your machine where not found and may need to be recompiled  

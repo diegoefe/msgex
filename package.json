@@ -8,8 +8,8 @@
   },
   "scripts": {
     "ts:node": "ts-node",
-    "test_ne": "mocha -r ts-node/register test/**/*.spec.ts",
-    "test": "bash ./run_tests.sh",
+    "test": "mocha -r ts-node/register test/**/*.spec.ts",
+    "test_all": "bash ./run_tests.sh",
     "dev": "nodemon",
     "kcons": "ts-node util/kafka_consumer.ts",
     "kprod": "ts-node util/kafka_producer.ts",

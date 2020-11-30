@@ -1,6 +1,6 @@
 import { KafkaClient, Consumer as KConsumer, Message, HighLevelProducer } from 'kafka-node';
 // import { Config } from './config';
-import { Msg, ErrMsg } from './msgproc';
+import { Msg, ErrMsg, iProducer } from './msgproc';
 
 class Cli {
     protected cli?:KafkaClient;
@@ -13,7 +13,7 @@ class Cli {
     }
 }
 
-export class Producer extends Cli {
+export class Producer extends Cli implements iProducer {
     private prod_?:HighLevelProducer;
     async connect(_host:string) {
         this.cli = await super.makeClient(_host);
