@@ -11,7 +11,7 @@ describe('Config',
       expect(cfg.kafka).to.eql(tcfg.kafka)
     });
     it('load from environment', function() {
-      if(process.platform === 'win32') {
+      if(! process.env.ME_KAFKA_URL) {
          this.skip();
       }
       const cfg:Config = new Config();
