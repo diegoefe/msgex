@@ -1,4 +1,4 @@
-## Simple message excercise
+## Simple messaging excercise
 
 ### Setup
 
