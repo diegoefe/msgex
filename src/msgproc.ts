@@ -63,7 +63,7 @@ export class MsgProc {
     readonly failure_limit:number;
     private prod_:iProducer;
     private msgs_:MsgDB = {};
-    private topics_;
+    private topics_:LooseObject;
     constructor(_config:Config, _prod:iProducer) {
         this.delay = _config.server.messages.processing_delay;
         this.failure_limit = _config.server.messages.failure_limit;
@@ -98,6 +98,8 @@ export class MsgProc {
     async consume(_msg:PingMsg) {
         if(_msg.transaction_id in this.msgs_) {
             let mt:MsgState = this.msgs_[_msg.transaction_id];
+            // updating error flag to simulate failure
+            mt.msg.payload.force_error = _msg.payload.force_error;
             switch(mt.status) {
                 case Status.Deleted:
                     // nothing to do

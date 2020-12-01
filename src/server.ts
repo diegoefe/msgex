@@ -9,11 +9,16 @@ import { Config } from '../src/config';
 import * as fs from 'fs';
 import { PingMsg, PongMsg } from './msgproc';
 
-let cfg:Config = new Config();;
-
-if(fs.existsSync('./config.yaml')) {
-    cfg = new Config('./config.yaml');
+const createConfig = () => {
+    const cfile:string = './config.yaml';
+    if(fs.existsSync(cfile)) {
+        console.log('Using config file "'+cfile+'"');
+        return new Config(cfile);
+    }
+    return new Config();
 }
+
+const cfg:Config = createConfig();
 
 const app:Application = express();
 app.use(bodyParser.json());
@@ -25,8 +30,13 @@ app.get('/', (req:Request, res:Response, nex:NextFunction) => {
 
 app.put('/message', (req:Request, res:Response) => {
     console.log("Got incoming message", req.body);
-    const msg:PingMsg = new PingMsg(req.body.force_error);
-    // enqueue the message
+    const payload = req.body.payload;
+    const msg:PingMsg = req.body.transaction_id ?
+                            new PingMsg(payload.force_error, req.body.trasaction_id) :
+                            new PingMsg(payload.force_error);
+    // enqueue the message (TODO)
+
+    // echo the created PingMsg
     res.send(msg);
 })
 

@@ -43,7 +43,9 @@
 
 - Win32
   - If **npm install** fails, you may try this command (before *npm install*), to make it work:
-    ```bash
-      npm install -g windows-build-tools.
+    ```ms-dos
+      npm install -g windows-build-tools
+      rem or
+      npm install --global --production windows-build-tools@4.0.0
     ```
     In case some pre-compiled binaries for your machine where not found and may need to be recompiled  
