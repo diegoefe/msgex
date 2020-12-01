@@ -19,7 +19,7 @@ export class Producer extends Cli implements iProducer {
         this.cli = await super.makeClient(_host);
         this.prod_ = new HighLevelProducer(this.cli);
     }
-    async send(_topic:string, _msg:Msg) {
+    async send(_topic:string, _msg:Msg) : Promise<string> {
         const payload = [{
             topic: _topic,
             messages: JSON.stringify(_msg, null, 2),
@@ -28,7 +28,7 @@ export class Producer extends Cli implements iProducer {
 
         if(this.prod_) {
             const prod:HighLevelProducer=this.prod_;
-            return new Promise((resolve,reject) => {
+            return new Promise<string>((resolve,reject) => {
             //Send payload to Kafka and log result/error
                 prod.send(payload, function(error, result) {
                     // console.info('Sent payload to Kafka: ', payload);
@@ -46,6 +46,7 @@ export class Producer extends Cli implements iProducer {
                 });
             });
         }
+        return new Promise<string>((res,rej) => { rej('error'); })
     }
 }
 

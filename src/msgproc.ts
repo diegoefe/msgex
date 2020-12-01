@@ -13,6 +13,10 @@ export class Msg {
         })
         this.transaction_id = _transaction_id;
     }
+    // custom conversion for "transaction-id"/transaction_id
+    toJSON(): {} {
+        return { payload: this.payload, "transaction-id": this.transaction_id };
+    }
 };
 
 export class PingMsg extends Msg {

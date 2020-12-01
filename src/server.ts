@@ -22,7 +22,7 @@ const cfg:Config = createConfig();
 
 const app:Application = express();
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req:Request, res:Response, nex:NextFunction) => {
     res.send('Sample messaging server, it\'s '+new Date());
@@ -31,10 +31,11 @@ app.get('/', (req:Request, res:Response, nex:NextFunction) => {
 app.put('/message', (req:Request, res:Response) => {
     console.log("Got incoming message", req.body);
     const payload = req.body.payload;
-    const msg:PingMsg = req.body.transaction_id ?
-                            new PingMsg(payload.force_error, req.body.trasaction_id) :
+    const msg:PingMsg = 'transaction-id' in req.body ?
+                            new PingMsg(payload.force_error, req.body['transaction-id']) :
                             new PingMsg(payload.force_error);
     // enqueue the message (TODO)
+    console.log('PingMsg', msg)
 
     // echo the created PingMsg
     res.send(msg);
