@@ -1,4 +1,4 @@
-import { Config } from './config'
+import { Config, iOutTopics } from './config'
 import { v4 as uuidv4 } from 'uuid';
 
 interface LooseObject {
@@ -70,7 +70,7 @@ export class MsgProc {
     readonly failure_limit:number;
     private prod_:iProducer;
     private msgs_:MsgDB = {};
-    private topics_:LooseObject;
+    private topics_:iOutTopics;
     constructor(_config:Config, _prod:iProducer) {
         this.delay = _config.messages.processing_delay;
         this.failure_limit = _config.messages.failure_limit;

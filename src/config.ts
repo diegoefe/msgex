@@ -5,13 +5,16 @@ interface iMsgs {
     processing_delay:number
     failure_limit: number
 }
+
+export interface iOutTopics {
+    success:string,
+    error:string,
+    dead:string
+}
+
 interface iTopics {
     inbound:string,
-    outbound: {
-        success:string,
-        error:string,
-        dead:string
-    }
+    outbound:iOutTopics
 }
 
 // loads configuration from file or environment

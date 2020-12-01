@@ -50,7 +50,7 @@ export class Producer extends Cli implements iProducer {
     }
 }
 
-export interface MsgInTopic {
+export interface iTopicMsg {
     topic:string;
     msg:Msg;
 }
@@ -68,7 +68,7 @@ export class Consumer extends Cli {
         this.cons_ = new KConsumer(this.cli, _topics, options);
     }
 
-    async receive() : Promise<MsgInTopic> {
+    async receive() : Promise<iTopicMsg> {
         if(this.cons_) {
             const cons:KConsumer = this.cons_;
             return new Promise((resolve,reject)=> {

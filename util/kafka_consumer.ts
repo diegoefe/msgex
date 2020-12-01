@@ -1,6 +1,6 @@
 import { Config } from '../src/config';
 import { PingMsg } from '../src/msgproc';
-import { Consumer, MsgInTopic } from '../src/kfk';
+import { Consumer, iTopicMsg } from '../src/kfk';
 
 const cfg:Config = new Config('./config.yaml');
 
@@ -24,7 +24,7 @@ const cfg:Config = new Config('./config.yaml');
       console.log("Waiting for messages");
       // this is buggy beacause it will block until the next message to shut down
       while(! stopped) {
-        const mit:MsgInTopic = await cons.receive();
+        const mit:iTopicMsg = await cons.receive();
         console.log('received message in topic "'+mit.topic+'"', mit.msg);
       }
       await cons.close();
