@@ -1,7 +1,7 @@
 server:
   port: 8088
 messages:
-  processing_delay: 30 # seconds
+  processing_delay: 30 # in seconds
   failure_limit: 3
 topics:
   inbound: myinboundtopic

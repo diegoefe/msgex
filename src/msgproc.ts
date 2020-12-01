@@ -20,6 +20,9 @@ export class Msg {
     toJSON(): {} {
         return { payload: this.payload, "transaction-id": this.transaction_id };
     }
+    clone() : Msg {
+        return new Msg('', this.payload, this.transaction_id);
+    }
 };
 
 export class PingMsg extends Msg {
@@ -83,8 +86,8 @@ export class MsgProc {
             this.msgs_[_msg.transaction_id] = mt;
         }
         // try {
-            const now:Date = new Date();    
-            const pong:PongMsg = new PongMsg(now.getDate()-_msg.payload.created_at.getDate(), mt.msg.transaction_id);
+            const now:Date = new Date();
+            const pong:PongMsg = new PongMsg(Math.floor((now.getTime()-_msg.payload.created_at.getTime())/1000), mt.msg.transaction_id);
             if(mt.msg.payload.force_error) {
                 await this.prod_.send(this.topics_.error, pong);
                 mt.status = Status.SendErr;
@@ -100,11 +103,13 @@ export class MsgProc {
         // } catch(e:any) { }
     }
     private process(_msg:PingMsg) {
-        setTimeout(() => { this.send(_msg); }, this.delay);
+        // console.log('processing', _msg.transaction_id)
+        setTimeout(() => { this.send(_msg); }, this.delay*1000);
     }
     async consume(_msg:PingMsg) {
         if(_msg.transaction_id in this.msgs_) {
             let mt:MsgState = this.msgs_[_msg.transaction_id];
+            // console.log("duplicated message", _msg, mt)
             // updating error flag to simulate failure
             mt.msg.payload.force_error = _msg.payload.force_error;
             switch(mt.status) {
@@ -113,6 +118,8 @@ export class MsgProc {
                     break;
                 case Status.SentOK:
                     // we respond without processing
+                    // processing_time should be 0
+                    _msg.payload.created_at = new Date();
                     await this.send(_msg);
                     break;
                 case Status.SendErr:
@@ -122,6 +129,7 @@ export class MsgProc {
             }
         } else {
             // new nessage
+            // console.log("new message", _msg)
             this.process(_msg);
         }
     }

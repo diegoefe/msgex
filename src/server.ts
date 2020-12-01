@@ -35,7 +35,7 @@ app.put('/message', (req:Request, res:Response) => {
                             new PingMsg(payload.force_error, req.body['transaction-id']) :
                             new PingMsg(payload.force_error);
     // enqueue the message (TODO)
-    console.log('PingMsg', msg)
+    // console.log('PingMsg', msg)
 
     // echo the created PingMsg
     res.send(msg);
