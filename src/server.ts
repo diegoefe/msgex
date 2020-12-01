@@ -38,8 +38,9 @@ app.put('/message', (req:Request, res:Response) => {
                             new PingMsg(payload.force_error, req.body['transaction-id']) :
                             new PingMsg(payload.force_error);
     // enqueue the message (TODO)
-    // console.log('PingMsg', msg)
     msgProc.consume(msg);
+    // console.log('PingMsg', msg)
+    
     // echo the created PingMsg
     res.send(msg);
 })
@@ -48,7 +49,8 @@ app.listen(cfg.server.port, async ()=> {
     try {
         await producer.connect(cfg.kafka.url);
         process.stdout.write('Server connected to kafka\n')
-    } catch(e:any) {
+    } catch(e) {
+        // TODO: better error resolution here
         console.log('error', e)
     }
     process.stdout.write('Server running on port '+cfg.server.port+'\n')
