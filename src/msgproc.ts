@@ -1,6 +1,9 @@
 import { Config } from './config'
 import { v4 as uuidv4 } from 'uuid';
-import { LooseObject } from './types';
+
+interface LooseObject {
+    [key: string]: any
+};
 
 // Message
 export class Msg {

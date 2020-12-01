@@ -1,8 +1,6 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
-import{ LooseObject } from './types';
-
 interface iMsgs {
     processing_delay:number
     failure_limit: number
