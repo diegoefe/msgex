@@ -10,7 +10,7 @@ const cfg:Config = new Config('./config.yaml');
       console.log('Connecting to '+cfg.kafka.url+'...');
       await prod.connect(cfg.kafka.url);
       console.log('Sending....');
-      await prod.send(cfg.kafka.topics.inbound, new PingMsg(false));
+      await prod.send(cfg.topics.inbound, new PingMsg(false));
       console.log('done')
       process.exit(0);
   } catch (e) {

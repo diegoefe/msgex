@@ -15,10 +15,10 @@ const cfg:Config = new Config('./config.yaml');
       console.log('Connecting to '+cfg.kafka.url+'...');
       await cons.connect(cfg.kafka.url,
         [
-                { topic:cfg.kafka.topics.outbound.success },
-                { topic:cfg.kafka.topics.outbound.error },
-                { topic:cfg.kafka.topics.outbound.dead },
-                { topic:cfg.kafka.topics.inbound }
+                { topic:cfg.topics.outbound.success },
+                { topic:cfg.topics.outbound.error },
+                { topic:cfg.topics.outbound.dead },
+                { topic:cfg.topics.inbound }
         ]
       );
       console.log("Waiting for messages");

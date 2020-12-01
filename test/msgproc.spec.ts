@@ -42,11 +42,11 @@ describe('Message processing',
     it('instantiation', () => {
       let dummyProc = stubConstructor(MockProd);
       let cfg:Config = new Config('./sample-config.yaml');
-      cfg.server.messages.processing_delay = 10;
-      cfg.server.messages.processing_delay = 4;
+      cfg.messages.processing_delay = 10;
+      cfg.messages.processing_delay = 4;
       let mp:MsgProc = new MsgProc(cfg, dummyProc);
-      expect(mp.delay).to.eql(cfg.server.messages.processing_delay);
-      expect(mp.failure_limit).to.eql(cfg.server.messages.failure_limit);
+      expect(mp.delay).to.eql(cfg.messages.processing_delay);
+      expect(mp.failure_limit).to.eql(cfg.messages.failure_limit);
     });
   });
 

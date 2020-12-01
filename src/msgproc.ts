@@ -69,10 +69,10 @@ export class MsgProc {
     private msgs_:MsgDB = {};
     private topics_:LooseObject;
     constructor(_config:Config, _prod:iProducer) {
-        this.delay = _config.server.messages.processing_delay;
-        this.failure_limit = _config.server.messages.failure_limit;
+        this.delay = _config.messages.processing_delay;
+        this.failure_limit = _config.messages.failure_limit;
         this.prod_ = _prod;
-        this.topics_ = _config.kafka.topics.outbound;
+        this.topics_ = _config.topics.outbound;
     }
     private async send(_msg:PingMsg) {
         let mt:MsgState = new MsgState(_msg);

@@ -1,14 +1,13 @@
 server:
-  messages:
-    processing_delay: 30 # seconds
-    failure_limit: 3
   port: 8088
-
+messages:
+  processing_delay: 30 # seconds
+  failure_limit: 3
+topics:
+  inbound: myinboundtopic
+  outbound:
+    success: myoutboundsuccesstopic 
+    error: myoutbounderrortopic
+    dead: mydeadlettertopic
 kafka:
   url: localhost:2181
-  topics:
-    inbound: myinboundtopic
-    outbound:
-      success: myoutboundsuccesstopic 
-      error: myoutbounderrortopic
-      dead: mydeadlettertopic
