@@ -2,9 +2,8 @@ import { expect } from 'chai';
 import 'mocha';
 
 import { Msg, PingMsg, PongMsg, ErrMsg, MsgProc, iProducer } from '../src/msgproc';
-import sinon, { stubConstructor } from "ts-sinon";
+import { stubConstructor } from "ts-sinon";
 import { Config } from '../src/config';
-import { resolve } from 'path';
 
 
 class MockProd implements iProducer {

@@ -7,7 +7,8 @@ import express, {
 import bodyParser from "body-parser";
 import { Config } from '../src/config';
 import * as fs from 'fs';
-import { PingMsg, PongMsg } from './msgproc';
+import { MsgProc, PingMsg } from './msgproc';
+import { Producer } from './kfk';
 
 const createConfig = () => {
     const cfile:string = './config.yaml';
@@ -19,6 +20,8 @@ const createConfig = () => {
 }
 
 const cfg:Config = createConfig();
+const producer:Producer = new Producer();
+const msgProc:MsgProc = new MsgProc(cfg, producer);
 
 const app:Application = express();
 app.use(bodyParser.json());
@@ -36,12 +39,18 @@ app.put('/message', (req:Request, res:Response) => {
                             new PingMsg(payload.force_error);
     // enqueue the message (TODO)
     // console.log('PingMsg', msg)
-
+    msgProc.consume(msg);
     // echo the created PingMsg
     res.send(msg);
 })
 
-app.listen(cfg.server.port, ()=> {
+app.listen(cfg.server.port, async ()=> {
+    try {
+        await producer.connect(cfg.kafka.url);
+        process.stdout.write('Server connected to kafka\n')
+    } catch(e:any) {
+        console.log('error', e)
+    }
     process.stdout.write('Server running on port '+cfg.server.port+'\n')
     process.stdout.write('Current configuration is\n'+JSON.stringify(cfg, null, 2)+'\n')
 });
