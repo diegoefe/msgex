@@ -61,30 +61,54 @@ describe('Message processing',
       expect(mp.delay).to.eql(cfg.messages.processing_delay);
       expect(mp.failure_limit).to.eql(cfg.messages.failure_limit);
     });
-
-    it('processing', async function() {
-      this.timeout(0); // disable time-out
+    describe('processing', () => { 
+      // setup
       let prod:MockProd = new MockProd();
       let cfg:Config = new Config('./sample-config.yaml');
       const pt:number=2;
       cfg.messages.processing_delay = pt;
       cfg.messages.failure_limit = 2;
-      let mp:MsgProc = new MsgProc(cfg, prod);
-      const id1:string = "transaction-1;"
-      const m1:PingMsg = new PingMsg(false, id1);
-      mp.consume(m1);
-      await delay(pt);
-      expect(prod.topic).to.eql(cfg.topics.outbound.success);
-      let p1:PongMsg = new PongMsg(pt, id1);
-      expect(prod.msg).to.eql(p1);
-      // same successufull message should not be processed
-      mp.consume(m1);
-      expect(prod.topic).to.eql(cfg.topics.outbound.success);
-      let rp1:PongMsg = p1.clone();
-      rp1.payload.processing_time = 0;
-      expect(prod.msg).to.eql(rp1);
-    });
+      
+      it('happy path', async function() {
+        this.timeout(0); // disable time-out
+        let mp:MsgProc = new MsgProc(cfg, prod);
+        const id1:string = "transaction-1;"
+        const m1:PingMsg = new PingMsg(false, id1);
+        mp.consume(m1);
+        await delay(pt);
+        expect(prod.topic).to.eql(cfg.topics.outbound.success);
+        let p1:PongMsg = new PongMsg(pt, id1);
+        expect(prod.msg).to.eql(p1);
+        // same successufull message should not be processed
+        mp.consume(m1);
+        expect(prod.topic).to.eql(cfg.topics.outbound.success);
+        let rp1:PongMsg = p1.clone();
+        rp1.payload.processing_time = 0;
+        expect(prod.msg).to.eql(rp1);
+      });
 
+      it/*.only*/('error/retrying', async function() {
+        this.timeout(0); // disable time-out
+        let mp:MsgProc = new MsgProc(cfg, prod);
+        const id1:string = "transaction-2;"
+        const m1:PingMsg = new PingMsg(true, id1);
+        mp.consume(m1);
+        await delay(pt);
+        expect(prod.topic).to.eql(cfg.topics.outbound.error);
+        let p1:PongMsg = new PongMsg(pt, id1);
+        expect(prod.msg).to.eql(p1);
+        // same successufull message should not be processed
+        mp.consume(m1);
+        await delay(pt);
+        expect(prod.topic).to.eql(cfg.topics.outbound.error);
+        expect(prod.msg).to.eql(p1.clone());
+
+        mp.consume(m1);
+        await delay(pt);
+        expect(prod.topic).to.eql(cfg.topics.outbound.dead);
+        expect(prod.msg).to.eql(p1.clone());
+      });
+    });
   });
 
 });

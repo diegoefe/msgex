@@ -84,23 +84,23 @@ export class MsgProc {
         let mt:MsgState = new MsgState(_msg);
         if(! (_msg.transaction_id in this.msgs_)) {
             this.msgs_[_msg.transaction_id] = mt;
+        } else {
+            mt = this.msgs_[_msg.transaction_id];
         }
-        // try {
-            const now:Date = new Date();
-            const pong:PongMsg = new PongMsg(Math.floor((now.getTime()-_msg.payload.created_at.getTime())/1000), mt.msg.transaction_id);
-            if(mt.msg.payload.force_error) {
-                await this.prod_.send(this.topics_.error, pong);
-                mt.status = Status.SendErr;
-            } else {
-                await this.prod_.send(this.topics_.success, pong);
-                mt.status = Status.SentOK;
-            }
-            ++mt.number_of_tries;
-            if(mt.number_of_tries>=this.failure_limit) {
-                await this.prod_.send(this.topics_.dead, pong);
-                mt.status = Status.Deleted;
-            }
-        // } catch(e:any) { }
+        const now:Date = new Date();
+        const pong:PongMsg = new PongMsg(Math.floor((now.getTime()-_msg.payload.created_at.getTime())/1000), mt.msg.transaction_id);
+        mt.number_of_tries++;
+        // console.log('mt', mt.number_of_tries, 'limit', this.failure_limit)
+        if(mt.number_of_tries>this.failure_limit) {
+            await this.prod_.send(this.topics_.dead, pong);
+            mt.status = Status.Deleted;
+        } else if(mt.msg.payload.force_error) {
+            await this.prod_.send(this.topics_.error, pong);
+            mt.status = Status.SendErr;
+        } else {
+            await this.prod_.send(this.topics_.success, pong);
+            mt.status = Status.SentOK;
+        }
     }
     private process(_msg:PingMsg) {
         // console.log('processing', _msg.transaction_id)
@@ -124,6 +124,7 @@ export class MsgProc {
                     break;
                 case Status.SendErr:
                     // retry the failed message
+                    _msg.payload.created_at = new Date();
                     this.process(_msg);
                     break;                    
             }
