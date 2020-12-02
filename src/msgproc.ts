@@ -37,11 +37,12 @@ export class PongMsg extends Msg {
     }
 }
 
-export class ErrMsg extends Msg {
-    constructor(_desc:string) {
-        super("error", {"description":_desc}, uuidv4());
+export class EndMsg extends Msg {
+    constructor() {
+        super("end", {}, uuidv4());
     }
 }
+
 
 export interface iProducer {
     send(_topic:string, _msg:Msg) : Promise<string>;

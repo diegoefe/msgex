@@ -1,14 +1,21 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { Msg, PingMsg, PongMsg, ErrMsg, MsgProc, iProducer } from '../src/msgproc';
+import { Msg, PingMsg, PongMsg, MsgProc, iProducer } from '../src/msgproc';
 import { stubConstructor } from "ts-sinon";
 import { Config } from '../src/config';
+import { v4 as uuidv4 } from 'uuid';
 
+
+class MockMsg extends Msg {
+  constructor(_desc:string) {
+      super("mock", {"description":_desc}, uuidv4());
+  }
+}
 
 class MockProd implements iProducer {
   topic:string = '';
-  msg:Msg = new ErrMsg('');
+  msg:Msg = new MockMsg('');
 
   send(_topic:string, _msg:Msg) {
     // console.log("MockProd.send", _topic, _msg)

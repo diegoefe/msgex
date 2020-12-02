@@ -6,6 +6,7 @@ const cfg:Config = new Config('./config.yaml');
 (async () => {
   try {
       let stopped=false;
+      const autoCommit:boolean=false;
       let cons:Consumer = new Consumer(cfg.kafka.url,
         [
                 { topic:cfg.topics.outbound.success },
@@ -13,7 +14,7 @@ const cfg:Config = new Config('./config.yaml');
                 { topic:cfg.topics.outbound.dead },
                 { topic:cfg.topics.inbound }
         ]
-      );
+      , autoCommit);
       // process.on('SIGINT', async function() {
       //     stopped=true;
       //     console.log('interrupted, aborting!')

@@ -1,20 +1,12 @@
 import { KafkaClient, Consumer as KConsumer, Message, HighLevelProducer } from 'kafka-node';
 // import { Config } from './config';
-import { Msg, ErrMsg, iProducer } from './msgproc';
+import { Msg, iProducer } from './msgproc';
 
 class Cli {
     protected cli:KafkaClient;
     constructor(_host:any) {
         this.cli = new KafkaClient(_host);
     }
-    // protected async makeClient(_host:any) : Promise<KafkaClient> {
-    //     let cli:KafkaClient = new KafkaClient(_host);
-    //     return new Promise((resolve, reject)=>{
-    //         cli.on('error', (err:string)=>reject("kafka connection error:"+err));
-    //         // cli.on('error', (err:string)=>reject(new Error(err)));
-    //         cli.on('ready', ()=>resolve(cli));
-    //     })
-    // }
 }
 
 export class Producer extends Cli implements iProducer {
@@ -59,12 +51,11 @@ export interface iTopicMsg {
 
 export class Consumer extends Cli {
     private cons_:KConsumer;
-    constructor(_host:any, _topics:any) {
+    constructor(_host:any, _topics:any, _auto_commit:boolean) {
         super(_host);
         this.cli = new KafkaClient(_host);
         var options = {
-            autoCommit: true,
-            // autoCommit: false,
+            autoCommit: _auto_commit,
             fetchMaxWaitMs: 1000,
             fetchMaxBytes: 1024 * 1024
         };
