@@ -51,11 +51,12 @@ const server = app.listen(cfg.server.port, async ()=> {
         process.stdout.write('consumer connected and listening for messages\n')
         while(true) {
             const mit:iTopicMsg = await consumer.receive();
-            console.log('received message', mit.topic, mit.msg);
+            console.log('received message on', mit.topic);
             if(mit.msg.payload.message === 'end') {
                 console.log('stopping consummer')
                 break;
             }
+            console.log('consumming inbound message', mit.msg)
             msgProc.consume(mit.msg);
         }
         console.log('Waiting for consumer to stop...');

@@ -12,7 +12,7 @@ const cfg:Config = new Config('./config.yaml');
                 { topic:cfg.topics.outbound.success },
                 { topic:cfg.topics.outbound.error },
                 { topic:cfg.topics.outbound.dead },
-                { topic:cfg.topics.inbound }
+                // { topic:cfg.topics.inbound }
         ]
       , autoCommit);
       // process.on('SIGINT', async function() {

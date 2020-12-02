@@ -1,4 +1,6 @@
 ## Simple messaging excercise
+- [Setup](#setup)
+- [Usage](#usage)
 
 ### Setup
 
@@ -49,3 +51,15 @@
       npm install --global --production windows-build-tools@4.0.0
     ```
     In case some pre-compiled binaries for your machine where not found and may need to be recompiled  
+
+
+### Usage
+- With the servers running you can produce a message with:
+  ```bash
+  $  node_modules/.bin/ts-node util/prod.ts
+  # or if you installed ts-node globally
+  $ ts-node util/prod.ts
+  # to generate messages with forced errors or custom transaction id's run it with -h for help
+  $ ts-node util/prod.ts -h
+  ```
+  Of course, you must use back-slashes in Windows platforms

@@ -68,7 +68,7 @@ export class Consumer extends Cli {
             // console.log('received message in topic "'+message.topic+'"')
             try {
                 const msg:Msg = JSON.parse(message.value.toString());
-                // console.log(msg);
+                // console.log("receiving msg", message.value, msg);
                 resolve({msg:msg, topic:message.topic})
             } catch (e:any) {
                 reject(new Error(e));
