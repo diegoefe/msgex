@@ -20,7 +20,7 @@ const createConfig = () => {
 }
 
 const cfg:Config = createConfig();
-const producer:Producer = new Producer();
+const producer:Producer = new Producer(cfg.kafka.url);
 const msgProc:MsgProc = new MsgProc(cfg, producer);
 
 const app:Application = express();
@@ -47,7 +47,7 @@ app.put('/message', (req:Request, res:Response) => {
 
 app.listen(cfg.server.port, async ()=> {
     try {
-        await producer.connect(cfg.kafka.url);
+        await producer.connect();
         process.stdout.write('Server connected to kafka\n')
     } catch(e) {
         // TODO: better error resolution here

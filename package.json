@@ -11,8 +11,8 @@
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "test_all": "bash ./run_tests.sh",
     "dev": "nodemon",
-    "kcons": "ts-node util/kafka_consumer.ts",
-    "kprod": "ts-node util/kafka_producer.ts",
+    "kcons": "ts-node util/kcons.ts",
+    "kprod": "ts-node util/kprod.ts",
     "start": "ts-node src/server.ts"
   },
   "author": "Diego Florio",
