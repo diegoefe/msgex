@@ -104,7 +104,7 @@ Of course, you must use back-slashes in Windows platforms
 - Linux
   - For testing, run (or npm test):
     ```bash
-      $ npm test_all
+      $ npm run test_all
     ```
 
 - Win32
