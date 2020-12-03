@@ -1,11 +1,13 @@
 import { Config, iOutTopics } from './config'
 import { v4 as uuidv4 } from 'uuid';
+import { json } from 'body-parser';
 
-interface LooseObject {
+export interface LooseObject {
     [key: string]: any
 };
 
 // Message
+
 export class Msg {
     readonly transaction_id:string;
     readonly payload:LooseObject;
@@ -16,9 +18,13 @@ export class Msg {
         })
         this.transaction_id = _transaction_id;
     }
-    // custom conversion for "transaction-id"/transaction_id
-    toJSON(): {} {
+    // // custom conversion for "transaction-id"/transaction_id
+    toJSON(): LooseObject {
         return { payload: this.payload, "transaction-id": this.transaction_id };
+    }
+    static fromJSON(json:LooseObject): Msg {
+        let msg:Msg = new Msg(json.payload.message, json.payload, json['transaction-id'])
+        return msg;
     }
     clone() : Msg {
         return new Msg('', this.payload, this.transaction_id);

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { Msg, PingMsg, PongMsg, MsgProc, iProducer } from '../src/msgproc';
+import { Msg, PingMsg, PongMsg, MsgProc, iProducer, LooseObject } from '../src/msgproc';
 import { stubConstructor } from "ts-sinon";
 import { Config } from '../src/config';
 import { v4 as uuidv4 } from 'uuid';
@@ -55,6 +55,21 @@ describe('Message processing',
       const pong:PongMsg = new PongMsg(new Date().getTime(), "dummy-id");
       expect(pong).to.eql(pong.clone());
     });
+
+    it/*.only*/('json convertions', () => {
+      const time:number=2000;
+      const id:string="some id"
+      const p:PongMsg = new PongMsg(time, id);
+      const js:string = `{
+        "transaction-id": "${id}",
+        "payload": {
+          "message":"pong",
+          "processing_time": ${time}
+        }
+      }`
+      expect(Msg.fromJSON(JSON.parse(js))).to.eql(p);
+    });
+
   });
   
   describe('MsgProc', () => { 
