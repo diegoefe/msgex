@@ -45,7 +45,7 @@ export class PongMsg extends Msg {
 
 export class EndMsg extends Msg {
     constructor() {
-        super("end", {}, uuidv4());
+        super("end", { "created_at": new Date() }, uuidv4());
     }
 }
 
@@ -82,14 +82,12 @@ export class MsgProc {
     private msgs_:MsgDB = {};
     private topics_:iOutTopics;
     constructor(_config:Config, _prod:iProducer) {
-        // console.log('MsgProc.config', _config);
         this.delay = _config.messages.processing_delay;
         this.failure_limit = _config.messages.failure_limit;
         this.prod_ = _prod;
         this.topics_ = _config.topics.outbound;
     }
     private async send(_msg:PingMsg) {
-        // try {
             let mt:MsgState = new MsgState(_msg);
             if(! (_msg.transaction_id in this.msgs_)) {
                 this.msgs_[_msg.transaction_id] = mt;
@@ -99,7 +97,6 @@ export class MsgProc {
             const now:Date = new Date();
             const pong:PongMsg = new PongMsg(Math.round((now.getTime()-new Date(_msg.payload.created_at).getTime())/1000), mt.msg.transaction_id);
             mt.number_of_tries++;
-            // console.log('mt', mt.number_of_tries, 'limit', this.failure_limit)
             if(mt.number_of_tries>this.failure_limit) {
                 await this.prod_.send(this.topics_.dead, pong);
                 mt.status = Status.Deleted;
@@ -110,10 +107,6 @@ export class MsgProc {
                 await this.prod_.send(this.topics_.success, pong);
                 mt.status = Status.SentOK;
             }
-        // } catch(e) {
-        //     // TODO: better error resolution here
-        //     console.log("MsgProc send error"+JSON.stringify(e));
-        // }
     }
     private process(_msg:PingMsg) {
         // console.log('delaying for ', this.delay)
@@ -124,7 +117,9 @@ export class MsgProc {
             let mt:MsgState = this.msgs_[_msg.transaction_id];
             // console.log("duplicated message", _msg, mt)
             // updating error flag to simulate failure
-            mt.msg.payload.force_error = _msg.payload.force_error;
+            if(mt.msg.payload.force_error) {
+                mt.msg.payload.force_error = _msg.payload.force_error;
+            }
             switch(mt.status) {
                 case Status.Deleted:
                     // nothing to do

@@ -2,14 +2,13 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import bodyParser from "body-parser";
 import { Config } from '../src/config';
 import * as fs from 'fs';
-import { MsgProc, PingMsg, EndMsg } from './msgproc';
+import { EndMsg, MsgProc, PingMsg } from './msgproc';
 import { Producer, Consumer, iTopicMsg } from './kfk';
 import { Server } from 'http';
 
 const createConfig = () => {
     const cfile:string = './config.yaml';
     if(fs.existsSync(cfile)) {
-        console.log('Using config file "'+cfile+'"');
         return new Config(cfile);
     }
     return new Config();
@@ -52,11 +51,11 @@ const server = app.listen(cfg.server.port, async ()=> {
         while(true) {
             const mit:iTopicMsg = await consumer.receive();
             console.log('received message on', mit.topic);
-            if(mit.msg.payload.message === 'end') {
+            if(mit.msg.payload.message==='end') {
                 console.log('stopping consummer')
                 break;
             }
-            console.log('consumming inbound message', mit.msg)
+            //console.log('consumming inbound message', mit.msg)
             msgProc.consume(mit.msg);
         }
         console.log('Waiting for consumer to stop...');
@@ -70,10 +69,9 @@ const server = app.listen(cfg.server.port, async ()=> {
         // TODO: better error resolution here
         console.log('error', e)
     }
-
 });
 
 process.on('SIGINT', async ()=>{
-    console.log('SIGINT detected sending EndMsg');
+    console.log('SIGINT detected, sending final message');
     await producer.send(cfg.topics.inbound, new EndMsg());
 })

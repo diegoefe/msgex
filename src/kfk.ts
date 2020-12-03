@@ -1,6 +1,6 @@
 import { KafkaClient, Consumer as KConsumer, Message, HighLevelProducer } from 'kafka-node';
 // import { Config } from './config';
-import { Msg, iProducer } from './msgproc';
+import { Msg, iProducer, PingMsg, LooseObject } from './msgproc';
 
 class Cli {
     protected cli:KafkaClient;
@@ -28,15 +28,13 @@ export class Producer extends Cli implements iProducer {
             messages: JSON.stringify(_msg, null, 2),
             attributes: 1 /* Use GZip compression for the payload */
         }];
+        // console.log('Producer: sending', _topic, _msg, payload[0].messages)
         return new Promise<string>((resolve,reject) => {
             //Send payload to Kafka and log result/error
             this.prod_.send(payload, function(error, result) {
-                // console.info('Sent payload to Kafka: ', payload);
                 if (error) {
                     reject(new Error("Producer send error:"+error));
                 } else {
-                    // var formattedResult = result[0];
-                    // console.log('result: ', result)
                     resolve(result);
                 }
             });
@@ -67,9 +65,9 @@ export class Consumer extends Cli {
             this.cons_.once('message', function(message:Message) {
             // console.log('received message in topic "'+message.topic+'"')
             try {
-                const msg:Msg = JSON.parse(message.value.toString());
-                // console.log("receiving msg", message.value, msg);
-                resolve({msg:msg, topic:message.topic})
+                const msg:Msg = Msg.fromJSON(JSON.parse(message.value.toString()));
+                // console.log("Consumer: receiving msg", message.value, msg);
+                resolve({msg:msg, topic:message.topic});
             } catch (e:any) {
                 reject(new Error(e));
             }

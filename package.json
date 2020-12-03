@@ -12,7 +12,7 @@
     "test_all": "bash ./run_tests.sh",
     "dev": "nodemon",
     "kcons": "ts-node util/kcons.ts",
-    "kprod": "ts-node util/kprod.ts",
+    "kinit": "ts-node util/kinit.ts",
     "start": "ts-node src/server.ts"
   },
   "author": "Diego Florio",

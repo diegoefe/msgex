@@ -21,7 +21,7 @@ const cfg:Config = new Config('./config.yaml');
         let prod:Producer = new Producer(cfg.kafka.url);
         console.log('Connecting to '+cfg.kafka.url+'...');
         await prod.connect();
-        console.log('cli.transactionId', cli.transactionId)
+        //console.log('cli.transactionId', cli.transactionId)
         const ping:PingMsg = new PingMsg(cli.error, cli.transactionId || uuidv4());
         console.log('Sending....', ping);
         await prod.send(cfg.topics.inbound, ping);

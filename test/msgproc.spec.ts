@@ -58,16 +58,21 @@ describe('Message processing',
 
     it/*.only*/('json convertions', () => {
       const time:number=2000;
-      const id:string="some id"
+      const id:string="some id";
       const p:PongMsg = new PongMsg(time, id);
-      const js:string = `{
-        "transaction-id": "${id}",
-        "payload": {
-          "message":"pong",
-          "processing_time": ${time}
-        }
-      }`
-      expect(Msg.fromJSON(JSON.parse(js))).to.eql(p);
+      const js:string =
+`{
+  "payload": {
+    "message": "pong",
+    "processing_time": ${time}
+  },
+  "transaction-id": "${id}"
+}`;
+      let mjs:LooseObject = JSON.parse(js);
+      expect(Msg.fromJSON(mjs)).to.eql(p);
+      const pstr:string = JSON.stringify(p,null,2);
+      expect(pstr).to.eql(js)
+      expect(JSON.parse(pstr)).to.eql(mjs)
     });
 
   });

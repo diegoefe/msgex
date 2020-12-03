@@ -12,13 +12,13 @@ const cfg:Config = new Config('./config.yaml');
                 { topic:cfg.topics.outbound.success },
                 { topic:cfg.topics.outbound.error },
                 { topic:cfg.topics.outbound.dead },
-                // { topic:cfg.topics.inbound }
+                { topic:cfg.topics.inbound }
         ]
       , autoCommit);
-      // process.on('SIGINT', async function() {
-      //     stopped=true;
-      //     console.log('interrupted, aborting!')
-      // });
+      process.on('SIGINT', async function() {
+        stopped=true;
+        console.log('interrupted, aborting!')
+      });
       console.log('Connecting to '+cfg.kafka.url+'...');
       console.log("Waiting for messages");
       // this is buggy beacause it will block until the next message to shut down
